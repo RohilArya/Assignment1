@@ -11,6 +11,9 @@ import java.util.*;
 public class Train {
     public TreeMap<String,Integer> hamTree;
     public TreeMap<String,Integer> spamTree;
+    public TreeMap<String, Double> HamProb;
+    public TreeMap<String, Double> SpamProb;
+    public TreeMap<String,Double> TotalProb;
 
     public int Occurence;
     public int countWord;
@@ -132,22 +135,89 @@ public class Train {
             return false;
         }
     }
-    /*
-    public double Probability(){
-        double Prob = 0.0;
-        for (Map.Entry<String, Integer>entry: wordCounter.entrySet())
+    private boolean isUniqueTotal(String token,TreeMap wordCounter)
+    {
+        String key = token;
+        if(wordCounter.get(key) == null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public void ProbabilityHam(){
+        double ProbHam = 0.0;
+        TreeMap<String,Double>HamProb = new TreeMap<>();
+        this.HamProb = HamProb;
+        for (Map.Entry<String, Integer>entry: hamTree.entrySet())
         {
             String key = entry.getKey();
             Integer Value = entry.getValue();
 
-            Prob = Value / numFiles;
+            ProbHam = Value / numFiles;
 
+            HamProb.put(key,ProbHam);
 
         }
-        return Prob;
     }
-*/
+    public void ProbabilitySpam(){
+        double ProbSpam = 0.0;
+        TreeMap<String,Double>SpamProb = new TreeMap<>();
+        this.SpamProb = SpamProb;
+        for (Map.Entry<String, Integer>entry: spamTree.entrySet())
+        {
+            String key = entry.getKey();
+            Integer Value = entry.getValue();
+
+            ProbSpam = Value / numFiles;
+
+            SpamProb.put(key,ProbSpam);
+
+        }
+    }
+    public void TotalProb(){
+        Double totalProb = 0.0;
+        Double ValueSpamP;
+        Double ValueHamP;
+        TreeMap<String, Double>TotalProb = new TreeMap<>();
+        for (Map.Entry<String, Double>entry:HamProb.entrySet()) {
+            String key = entry.getKey();
+            ValueHamP = entry.getValue();
+
+            if (SpamProb.get(key) == null) {
+                totalProb = 0.0;
+            } else {
+                Map.Entry<String, Double> entry1 = (Map.Entry<String, Double>) SpamProb.entrySet();
+                ValueSpamP = entry1.getValue();
+
+                totalProb = ValueSpamP / (ValueHamP + ValueSpamP);
+
+            }
+            TotalProb.put(key, totalProb);
+        }
+        for (Map.Entry<String, Double>entry1:SpamProb.entrySet())
+        {
+            String key = entry1.getKey();
+            ValueSpamP = entry1.getValue();
+            if (isUniqueTotal(key,TotalProb)){
+                if(HamProb.get(key) == null){
+                    totalProb = 1.0;
+                }
+                else
+                {
+                    Map.Entry<String, Double>entry = (Map.Entry<String, Double>) HamProb.entrySet();
+                    ValueHamP = entry.getValue();
+
+                    totalProb = ValueSpamP / (ValueHamP + ValueSpamP);
+
+                }
+                TotalProb.put(key, totalProb);
+            }
+        }
+    }
 }
+
 
     /*public void printWordCounts(int minCount, File outFile) throws IOException {
         if (!outFile.exists() || outFile.canWrite()) {
