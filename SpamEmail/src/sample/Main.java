@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Main extends Application {
 
@@ -22,10 +23,11 @@ public class Main extends Application {
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         launch(args);
         File file = new File("\\Users\\100585195\\Desktop\\Assignment1\\data\\test\\ham");
         File file2 = new File("\\Users\\100585195\\Desktop\\Assignment1\\data\\test\\spam");
-        Train Spamham = new Train(file,file2);
+        Train Spamham;
+        Spamham = new Train(file,file2);
     }
 }
