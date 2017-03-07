@@ -181,6 +181,7 @@ public class Train {
         Double ValueSpamP;
         Double ValueHamP;
         TreeMap<String, Double>TotalProb = new TreeMap<>();
+        this.TotalProb = TotalProb;
         for (Map.Entry<String, Double>entry:HamProb.entrySet()) {
             String key = entry.getKey();
             ValueHamP = entry.getValue();
