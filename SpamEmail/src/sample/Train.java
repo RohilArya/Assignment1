@@ -21,16 +21,17 @@ public class Train {
     public File file2;
     public int numFiles;
 
+
     public double TrainHam() throws IOException {
         TreeMap<String,Integer> hamTree= new TreeMap<>();
         this.hamTree=hamTree;
-        processFileHam(file,hamTree);
+        processFileHam(file);
         return 0.0;}
 
     public double TrainSpam() throws IOException {
         TreeMap<String,Integer>spamTree= new TreeMap<>();
         this.spamTree=spamTree;
-        processFileSpam(file2,spamTree);
+        processFileSpam(file2);
 
         return 0.0;}
 
@@ -42,13 +43,13 @@ public class Train {
         TrainSpam();
     }
 
-    public void processFileSpam(File file, TreeMap wordCounter) throws IOException {
+    public void processFileSpam(File file) throws IOException {
         if (file.isDirectory()) {
             // for directories, recursively call
             File[] filesInDir = file.listFiles();
             numFiles = filesInDir.length;
             for (int i = 0; i < filesInDir.length; i++) {
-                processFileSpam(filesInDir[i],wordCounter);
+                processFileSpam(filesInDir[i]);
             }
             System.out.println(file);
         } else {
@@ -57,20 +58,21 @@ public class Train {
             while (scanner.hasNext()) {
                 String word = scanner.next();
                 if (isWord(word)) {
-                    if(isUniqueSpam(word,wordCounter)){
+                    if(isUniqueSpam(word,spamTree)){
                     }
                 }
             }
         }
+        ProbabilitySpam();
     }
 
-    public void processFileHam(File file, TreeMap wordCounter) throws IOException {
+    public void processFileHam(File file) throws IOException {
         if (file.isDirectory()) {
             // for directories, recursively call
             File[] filesInDir = file.listFiles();
             numFiles = filesInDir.length;
             for (int i = 0; i < filesInDir.length; i++) {
-                processFileHam(filesInDir[i],wordCounter);
+                processFileHam(filesInDir[i]);
             }
             System.out.println(file);
         } else {
@@ -79,11 +81,12 @@ public class Train {
             while (scanner.hasNext()) {
                 String word = scanner.next();
                 if (isWord(word)) {
-                    if(isUniqueHam(word,wordCounter)){
+                    if(isUniqueHam(word,hamTree)){
                     }
                 }
             }
         }
+        ProbabilityHam();
     }
 
    /* private int countWord(String word) {
@@ -176,13 +179,13 @@ public class Train {
 
         }
     }
-    public void TotalProb(){
+    public TreeMap<String, Double>TotalProb() {
         Double totalProb = 0.0;
         Double ValueSpamP;
         Double ValueHamP;
-        TreeMap<String, Double>TotalProb = new TreeMap<>();
+        TreeMap<String, Double> TotalProb = new TreeMap<>();
         this.TotalProb = TotalProb;
-        for (Map.Entry<String, Double>entry:HamProb.entrySet()) {
+        for (Map.Entry<String, Double> entry : HamProb.entrySet()) {
             String key = entry.getKey();
             ValueHamP = entry.getValue();
 
@@ -197,17 +200,14 @@ public class Train {
             }
             TotalProb.put(key, totalProb);
         }
-        for (Map.Entry<String, Double>entry1:SpamProb.entrySet())
-        {
+        for (Map.Entry<String, Double> entry1 : SpamProb.entrySet()) {
             String key = entry1.getKey();
             ValueSpamP = entry1.getValue();
-            if (isUniqueTotal(key,TotalProb)){
-                if(HamProb.get(key) == null){
+            if (isUniqueTotal(key, TotalProb)) {
+                if (HamProb.get(key) == null) {
                     totalProb = 1.0;
-                }
-                else
-                {
-                    Map.Entry<String, Double>entry = (Map.Entry<String, Double>) HamProb.entrySet();
+                } else {
+                    Map.Entry<String, Double> entry = (Map.Entry<String, Double>) HamProb.entrySet();
                     ValueHamP = entry.getValue();
 
                     totalProb = ValueSpamP / (ValueHamP + ValueSpamP);
@@ -216,6 +216,7 @@ public class Train {
                 TotalProb.put(key, totalProb);
             }
         }
+        return TotalProb;
     }
 }
 
