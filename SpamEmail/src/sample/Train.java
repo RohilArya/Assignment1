@@ -2,16 +2,34 @@ package sample;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import java.util.*;
 
 /**
  * Created by 100585195 on 3/4/2017.
  */
 public class Train {
-    private Map<String, Integer> wordCounter;
+    public Map<String, Integer> wordCounter;
+    public int Occurence;
+    public int countWord;
+    public File file;
+    public File file2;
+    public int numFiles;
 
-    public Train() {
+    public double TrainHam() throws IOException {
+        processFile(file);
+        return 0.0;}
+
+    public double TrainSpam() throws IOException {
+        processFile(file2);
+
+        return 0.0;}
+
+
+    public Train(File file, File file2) {
+        file = this.file;
+        file2 = this.file2;
+
         wordCounter = new TreeMap<>();
     }
 
@@ -19,6 +37,7 @@ public class Train {
         if (file.isDirectory()) {
             // for directories, recursively call
             File[] filesInDir = file.listFiles();
+            numFiles = filesInDir.length;
             for (int i = 0; i < filesInDir.length; i++) {
                 processFile(filesInDir[i]);
             }
@@ -29,13 +48,14 @@ public class Train {
             while (scanner.hasNext()) {
                 String word = scanner.next();
                 if (isWord(word)) {
-                    countWord(word);
+                    if(isUnique(word)){
+                    }
                 }
             }
         }
     }
 
-    private void countWord(String word) {
+   /* private int countWord(String word) {
         if (wordCounter.containsKey(word)) {
             // increment the count
             int oldCount = wordCounter.get(word);
@@ -44,7 +64,8 @@ public class Train {
             // add the word with count of 1
             wordCounter.put(word, 1);
         }
-    }
+        return
+    } */
 
     private boolean isWord(String token) {
         String pattern = "^[a-zA-Z]*$";
@@ -54,6 +75,34 @@ public class Train {
             return false;
         }
     }
+    private boolean isUnique(String token)
+    {
+        String key = token;
+        if(wordCounter.get(key) == null) {
+
+            wordCounter.put(key, 1);
+            return true;
+        }
+        else {
+
+            wordCounter.put(key, (wordCounter.get(key))+1);
+            return false;
+        }
+    }
+    public double Probability(){
+        double Prob = 0.0;
+        for (Map.Entry<String, Integer>entry: wordCounter.entrySet())
+        {
+            String key = entry.getKey();
+            Integer Value = entry.getValue();
+
+            Prob = Value / numFiles;
+
+
+        }
+        return Prob;
+    }
+
 }
 
     /*public void printWordCounts(int minCount, File outFile) throws IOException {

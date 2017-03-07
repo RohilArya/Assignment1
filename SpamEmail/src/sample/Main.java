@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 public class Main extends Application {
 
     @Override
@@ -18,7 +20,12 @@ public class Main extends Application {
 
 
 
+
+
     public static void main(String[] args) {
         launch(args);
+        File file = new File("\\Users\\100585195\\Desktop\\Assignment1\\data\\test\\ham");
+        File file2 = new File("\\Users\\100585195\\Desktop\\Assignment1\\data\\test\\spam");
+        Train Spamham = new Train(file,file2);
     }
 }
