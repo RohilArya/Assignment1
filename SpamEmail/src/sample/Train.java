@@ -19,6 +19,7 @@ public class Train {
     public File file;
     public File file2;
     public int numFiles;
+    public int numFiles2;
 
     public Train(File file, File file2) throws IOException {
         this.file=file;
@@ -33,7 +34,10 @@ public class Train {
         processFileHam(file);
         System.out.println("HAM TREE:");
         System.out.print(hamTree);
-        System.out.print(HamProb);
+        System.out.println("\n"+numFiles);
+        System.out.println(ProbabilityHam());
+
+        //System.out.print(HamProb);
 
     }
 
@@ -42,6 +46,8 @@ public class Train {
         processFileSpam(file2);
         System.out.println("SPAM TREE:");
         System.out.print(spamTree);
+        System.out.println("\n"+numFiles2);
+        System.out.println(ProbabilitySpam());
 
     }
 
@@ -52,11 +58,11 @@ public class Train {
         if (file.isDirectory()) {
             // for directories, recursively call
             File[] filesInDir = file.listFiles();
-            numFiles = filesInDir.length;
+            numFiles2 = filesInDir.length;
             for (int i = 0; i < filesInDir.length; i++) {
                 processFileSpam(filesInDir[i]);
             }
-            System.out.println(file);
+
         } else {
             // for single files, load the words and count
             Scanner scanner = new Scanner(file);
@@ -113,7 +119,7 @@ public class Train {
             return true;
         }
         else {
-            int i = hamTree.get(key);
+
             hamTree.put(key, (hamTree.get(key))+1);
             return false;
         }
@@ -127,7 +133,7 @@ public class Train {
             return true;
         }
         else {
-            int i = spamTree.get(key);
+
             spamTree.put(key, (spamTree.get(key))+1);
             return false;
         }
@@ -143,42 +149,40 @@ public class Train {
         }
     }
 
-    public void ProbabilityHam(){
+    public TreeMap<String,Double> ProbabilityHam(){
         double ProbHam = 0.0;
-        TreeMap<String,Double>HamProb = new TreeMap<>();
-        this.HamProb = HamProb;
+        TreeMap<String,Double>HamProb=new TreeMap<>();
+
         for (Map.Entry<String, Integer>entry: hamTree.entrySet())
         {
             String key = entry.getKey();
-            Integer Value = entry.getValue();
-
-            ProbHam = Value / numFiles;
+            double Value = entry.getValue();
+            ProbHam = (Value / numFiles);
 
             HamProb.put(key,ProbHam);
 
         }
+        return HamProb;
     }
-    public void ProbabilitySpam(){
+    public TreeMap<String, Double> ProbabilitySpam(){
         double ProbSpam = 0.0;
-        TreeMap<String,Double>SpamProb = new TreeMap<>();
-        this.SpamProb = SpamProb;
+        TreeMap<String,Double>SpamProb=new TreeMap<>();
+
         for (Map.Entry<String, Integer>entry: spamTree.entrySet())
         {
             String key = entry.getKey();
-            Integer Value = entry.getValue();
-
-            ProbSpam = Value / numFiles;
+            double Value = entry.getValue();
+            ProbSpam = (Value / numFiles2);
 
             SpamProb.put(key,ProbSpam);
 
         }
+        return SpamProb;
     }
     public void TotalProb(){
         Double totalProb = 0.0;
         Double ValueSpamP;
         Double ValueHamP;
-        TreeMap<String, Double>TotalProb = new TreeMap<>();
-        this.TotalProb = TotalProb;
         for (Map.Entry<String, Double>entry:HamProb.entrySet()) {
             String key = entry.getKey();
             ValueHamP = entry.getValue();

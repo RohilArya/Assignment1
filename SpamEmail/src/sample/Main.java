@@ -25,8 +25,8 @@ public class Main extends Application {
 
     public static void main(String[] args) throws IOException {
         launch(args);
-        File file = new File("\\Users\\100585195\\Desktop\\Assignment1\\data\\test\\ham");
-        File file2 = new File("\\Users\\100585195\\Desktop\\Assignment1\\data\\test\\spam");
+        File file = new File("/home/harshan/Desktop/Assignments/Assignment1/data/train/ham/");
+        File file2 = new File("/home/harshan/Desktop/Assignments/Assignment1/data/train/spam");
         Train Spamham;
         Spamham = new Train(file,file2);
     }
