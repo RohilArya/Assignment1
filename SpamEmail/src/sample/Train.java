@@ -26,6 +26,7 @@ public class Train {
         this.file2=file2;
         TrainHam();
         TrainSpam();
+        System.out.print(TotalProb());
 
     }
 
@@ -179,19 +180,26 @@ public class Train {
         }
         return SpamProb;
     }
-    public void TotalProb(){
-        Double totalProb = 0.0;
-        Double ValueSpamP;
-        Double ValueHamP;
+    public TreeMap<String,Double> TotalProb(){
+        double totalProb = 0.0;
+        double ValueSpamP;
+        HamProb = ProbabilityHam();
+        SpamProb = ProbabilitySpam();
+        TreeMap<String,Double>TotalProb = new TreeMap<>();
         for (Map.Entry<String, Double>entry:HamProb.entrySet()) {
+            System.out.println("Helleeeeeeeo");
             String key = entry.getKey();
-            ValueHamP = entry.getValue();
+            double ValueHamP = entry.getValue();
+            System.out.println(" ");
+            System.out.println("Hello");
 
             if (SpamProb.get(key) == null) {
                 totalProb = 0.0;
-            } else {
-                Map.Entry<String, Double> entry1 = (Map.Entry<String, Double>) SpamProb.entrySet();
-                ValueSpamP = entry1.getValue();
+            }
+            else
+            {
+                ValueSpamP = SpamProb.get(key);
+                System.out.println("hi");
 
                 totalProb = ValueSpamP / (ValueHamP + ValueSpamP);
 
@@ -209,7 +217,7 @@ public class Train {
                 else
                 {
                     Map.Entry<String, Double>entry = (Map.Entry<String, Double>) HamProb.entrySet();
-                    ValueHamP = entry.getValue();
+                    double ValueHamP = entry.getValue();
 
                     totalProb = ValueSpamP / (ValueHamP + ValueSpamP);
 
@@ -217,6 +225,7 @@ public class Train {
                 TotalProb.put(key, totalProb);
             }
         }
+        return TotalProb;
     }
 }
 
