@@ -187,11 +187,8 @@ public class Train {
         SpamProb = ProbabilitySpam();
         TreeMap<String,Double>TotalProb = new TreeMap<>();
         for (Map.Entry<String, Double>entry:HamProb.entrySet()) {
-            System.out.println("Helleeeeeeeo");
             String key = entry.getKey();
             double ValueHamP = entry.getValue();
-            System.out.println(" ");
-            System.out.println("Hello");
 
             if (SpamProb.get(key) == null) {
                 totalProb = 0.0;
@@ -199,8 +196,6 @@ public class Train {
             else
             {
                 ValueSpamP = SpamProb.get(key);
-                System.out.println("hi");
-
                 totalProb = ValueSpamP / (ValueHamP + ValueSpamP);
 
             }
