@@ -5,12 +5,12 @@ public class TestFile {
     private double spamProbability;
     private String actualClass;
 
-    public TestFile(String filename,
-                    double spamProbability,
-                    String actualClass) {
+    public TestFile(String filename, double spamProbability, String actualClass) {
         this.filename = filename;
         this.spamProbability = spamProbability;
         this.actualClass = actualClass;
+
+
     }
 
     public String getFilename() { return this.filename; }

@@ -26,6 +26,7 @@ public class Train {
         this.file2=file2;
         TrainHam();
         TrainSpam();
+        System.out.println("Probability Map");
         System.out.print(TotalProb());
 
     }
@@ -35,7 +36,7 @@ public class Train {
         processFileHam(file);
         System.out.println("HAM TREE:");
         System.out.print(hamTree);
-        System.out.println("\n"+numFiles);
+        System.out.println("\nHam Frequency:");
         System.out.println(ProbabilityHam());
 
         //System.out.print(HamProb);
@@ -47,7 +48,7 @@ public class Train {
         processFileSpam(file2);
         System.out.println("SPAM TREE:");
         System.out.print(spamTree);
-        System.out.println("\n"+numFiles2);
+        System.out.println("\nSpam Frequency:");
         System.out.println(ProbabilitySpam());
 
     }
